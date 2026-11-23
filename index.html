@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CSS · Positionnement & Flexbox — DEV102 C.3</title>
+<style>
+:root{--bg:#F5F7FB;--navy:#14213D;--card:#fff;--line:#D5DBE8;--fg:#14213D;--mut:#5B6577;--blue:#2563EB;--org:#F97316;--amb:#F59E0B;--grn:#16A34A;--red:#DC2626;--code:#1E1E2E;--pc:#2563EB;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C1428;--card:#16223F;--line:#2A3A5E;--fg:#E6E6F0;--mut:#9AA6BD;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0C1428;--card:#16223F;--line:#2A3A5E;--fg:#E6E6F0;--mut:#9AA6BD;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.45 Calibri,"Segoe UI",system-ui,sans-serif;display:flex;flex-direction:column}
+.hd{flex:none;background:var(--navy);color:#fff;display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:4px solid var(--pc)}
+.hd h1{margin:0;font-size:clamp(20px,4.6vw,30px);flex:1;line-height:1.15}
+.tag{background:var(--pc);color:#fff;font:700 10px Calibri,sans-serif;letter-spacing:.05em;padding:6px 10px;border-radius:4px;white-space:nowrap}
+.num{background:#fff;color:var(--navy);font-weight:700;border-radius:8px;min-width:38px;text-align:center;padding:6px 8px}
+body.dk .hd{display:none}
+main{flex:1;overflow-y:auto;padding:16px}
+body.dk main{background:var(--navy);color:#fff;border-left:12px solid var(--org)}
+.s{max-width:980px;margin:0 auto;animation:in .25s}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lead{background:#DCE6FA;color:#14213D;border:1px solid #C9D3E6;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:17px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(20,33,61,.07)}
+.card b{display:block;font-size:17px;margin:4px 0}
+.card p{margin:4px 0;color:var(--mut)}
+button.card{all:unset;display:block;cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(20,33,61,.07)}
+button.card:hover,button.card:focus-visible{border-color:var(--blue)}
+.bd{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;color:#fff;font-weight:700;background:var(--c)}
+.lb{display:inline-block;background:var(--c);color:#fff;font:700 11px Calibri,sans-serif;border-radius:99px;padding:3px 10px;margin-top:6px}
+.pt{margin:7px 0}.pt b{color:var(--blue)}
+.code{background:var(--code);border-radius:10px;padding:8px 12px;margin:10px 0}
+.code i{display:inline-block;background:var(--org);color:#fff;font:700 10px Calibri,sans-serif;font-style:normal;padding:2px 8px;border-radius:4px}
+pre{margin:6px 0 0;color:#E6E6F0;font:13px/1.5 "Courier New",monospace;overflow-x:auto}
+.k{color:#7FB0FF}.v{color:#FDBA74}
+.cap{font-style:italic;color:var(--mut);margin:6px 0;font-size:14px}
+.note{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;color:var(--fg)}
+.sc{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:520px;background:var(--card);border-radius:10px;overflow:hidden;font-size:14.5px}
+th{background:var(--navy);color:#fff;text-align:left;padding:9px}
+td{padding:9px;border-bottom:1px solid var(--line)}
+td:first-child{font:700 13px "Courier New",monospace;color:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{font:700 13px "Courier New",monospace;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:99px;padding:6px 12px;cursor:pointer}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.lbl{font:700 12px "Courier New",monospace;color:var(--mut);margin-top:6px}
+input[type=range]{width:100%;accent-color:var(--blue)}
+.stage{position:relative;transform:translateZ(0);height:260px;border:2px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.scr{height:100%;overflow:auto}
+.fill{height:70px;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:12px;background:repeating-linear-gradient(45deg,transparent 0 8px,var(--line) 8px 9px)}
+.par{min-height:320px;border:2px dashed var(--mut);margin:6px;padding:6px;border-radius:8px;font-size:12px;color:var(--mut)}
+.par.rel{position:relative}
+.sib{background:var(--line);padding:8px;border-radius:8px;margin:4px 0;font-size:12px;color:var(--mut)}
+.bx{background:var(--blue);color:#fff;padding:8px 12px;border-radius:8px;width:max-content;font-weight:700;font-size:14px;z-index:2}
+.fl{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px;overflow:hidden}
+.fl .ph{width:90px;height:70px;border-radius:8px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;margin:0 12px 6px 0}
+.fx{display:flex;height:220px;border:2px dashed var(--mut);border-radius:10px;background:var(--card);padding:10px}
+.it{background:var(--blue);color:#fff;font-weight:700;border-radius:8px;display:flex;align-items:center;justify-content:center;min-width:54px;font-size:20px}
+.it:nth-child(2){background:var(--org)}.it:nth-child(3){background:var(--grn)}
+.mini{display:flex;height:74px;border:1px dashed var(--mut);border-radius:8px;padding:4px;gap:4px;margin:6px 0}
+.mini i{background:var(--blue);border-radius:4px;width:24px}.mini i:nth-child(2){background:var(--org)}.mini i:nth-child(3){background:var(--grn)}
+.nv{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:8px 12px;border-radius:8px;margin-bottom:8px;font-size:14px}
+.nv span{display:flex;gap:12px}
+.cds{display:flex;flex-wrap:wrap;gap:8px}.cds div{flex:1 1 110px;background:var(--blue);color:#fff;border-radius:8px;padding:12px;text-align:center}
+.bgc{position:relative;display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 30px;margin-top:12px}
+.bgc em{position:absolute;top:-10px;right:12px;background:orange;color:#14213D;font:700 12px Calibri,sans-serif;font-style:normal;padding:4px 10px;border-radius:6px}
+.big{font-size:clamp(30px,7vw,52px);line-height:1.1;margin:8px 0}
+.ppl{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0}
+.ppl div{background:var(--blue);color:#fff;border-radius:12px;padding:14px;font-weight:700}.ppl div.o{background:var(--org)}
+footer{flex:none;display:flex;align-items:center;gap:10px;padding:8px 16px;border-top:1px solid var(--line);background:var(--card);font-size:12px;color:var(--mut)}
+footer .w{flex:1;min-width:0}
+.btn{all:unset;cursor:pointer;background:var(--blue);color:#fff;border-radius:8px;padding:7px 14px;font-weight:700;font-size:13px}
+.btn.g{background:var(--navy)}.btn:disabled{opacity:.35;cursor:default}
+@media (max-width:640px){.cols{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="hd"><h1 id="ttl"></h1><span class="tag" id="tag"></span><span class="num" id="num"></span></div>
+<main id="m"></main>
+<footer><span class="w" id="who"></span><button class="btn g" id="plan">Plan</button><button class="btn" id="prev">←</button><button class="btn" id="next">→</button></footer>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const hl=l=>esc(l).replace(/^(\s*)([a-z-]+)(:)(.*)$/,'$1<span class="k">$2</span>$3<span class="v">$4</span>');
+const CL=['#5B6577','#2563EB','#F97316','#16A34A','#DC2626','#F59E0B'];
+const code=(L,t)=>'<div class="code"><i>'+(t||'CSS')+'</i><pre>'+L.map(hl).join('\n')+'</pre></div>';
+const lead=t=>'<div class="lead">'+t+'</div>';
+const pts=a=>a.map(([l,t])=>'<div class="pt"><b>'+l+' :</b> '+t+'</div>').join('');
+const cap=t=>t?'<div class="cap">'+t+'</div>':'';
+const note=t=>t?'<div class="note">'+t+'</div>':'';
+const cards=(a,o={})=>'<div class="grid">'+a.map((c,i)=>{const [h,p,l,x]=c;return '<'+(o.go?'button':'div')+' class="card" style="--c:'+CL[(i+1)%6]+'"'+(o.go?' data-go="'+o.go[i]+'"':'')+'>'+(o.num?'<span class="bd">'+(i+1)+'</span>':'')+'<b>'+h+'</b>'+(x||'')+'<p>'+p+'</p>'+(l?'<span class="lb">'+l+'</span>':'')+'</'+(o.go?'button':'div')+'>'}).join('')+'</div>';
+const table=r=>'<div class="sc"><table><tr>'+r[0].map(h=>'<th>'+h+'</th>').join('')+'</tr>'+r.slice(1).map(x=>'<tr>'+x.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table></div>';
+const mini=(css,n=3)=>'<div class="mini" style="'+css+'">'+['<i style="height:22px"></i>','<i style="height:46px"></i>','<i style="height:34px"></i>'].slice(0,n).join('')+'</div>';
+const det=(l,p,c,cp,viz)=>'<div class="cols"><div>'+lead(l)+pts(p)+(c?code(c):'')+cap(cp)+'</div><div>'+(viz?'<div id="viz"></div>':'')+'</div></div>';
+
+const A1='Abdellah Akil',A2='Lahmourat Azelarab',A3='Hiba Jaouhari',A4='Malak Jebni';
+const S=[];
+const add=(o)=>S.push(o);
+add({id:'t',k:'title'});
+add({id:'plan',p:0,t:'Plan de la présentation',tg:'PLAN & CONTEXTE',w:A1,h:()=>cards([['Introduction','Le flux normal d’une page',A1],['Positionnement','static, relative, absolute, fixed, sticky, float',A1+' & '+A2],['Flexbox','Conteneur, axes, alignement, taille des éléments',A3+' & '+A4],['Pratique','TP avancé, quiz Quizizz et conclusion','Toute l’équipe']],{num:1,go:['flux','types','flex','prat']})});
+add({id:'flux',p:0,t:'Le flux normal d’une page',tg:'PLAN & CONTEXTE',w:A1,h:()=>det('Flux normal : le navigateur place les éléments dans l’ordre du code HTML, sans aucune règle de position.',[['block','prend toute la largeur, s’empile vers le bas (div, p, h1)'],['inline','reste sur la ligne, largeur du contenu (span, a)'],['Objectif','sortir du flux quand c’est nécessaire']],['<h1>Titre</h1>','<p>Un paragraphe</p>','<span>inline 1</span>','<span>inline 2</span>'].map(x=>x),'Les blocs s’empilent, les inlines se suivent',1),i:m=>{m.querySelector('#viz').innerHTML='<div class="card"><div class="sib" style="background:var(--blue);color:#fff">&lt;h1&gt; · block</div><div class="sib" style="background:var(--blue);color:#fff">&lt;p&gt; · block</div><span class="sib" style="display:inline-block;background:var(--org);color:#fff">inline 1</span> <span class="sib" style="display:inline-block;background:var(--org);color:#fff">inline 2</span></div>'}});
+add({id:'types',p:1,t:'Les types de positionnement',tg:'PARTIE 1 · POSITIONNEMENT',w:A1,h:()=>cards([['position: static','Valeur par défaut : suit le flux normal'],['position: relative','Décalé par rapport à sa place d’origine'],['position: absolute','Placé par rapport au parent positionné'],['position: fixed','Collé à la fenêtre du navigateur'],['position: sticky','Normal puis « collé » à un seuil'],['float','Flotte à gauche ou à droite du texte']],{num:1})+cap('float est une propriété à part : float: left | right')});
+const PD=(id,t,l,p,c,cp,ty,w)=>add({id,p:1,t,tg:'PARTIE 1 · POSITIONNEMENT',w,h:()=>det(l,p,c,cp,1),i:m=>posDemo(m.querySelector('#viz'),ty,false)});
+PD('static','position: static','static : comportement par défaut. L’élément suit le flux normal.',[['Ordre','celui du HTML'],['Sans effet','top, right, bottom, left, z-index'],['Usage','annuler un autre positionnement']],['.boite {','  position: static;  /* par défaut */','  top: 50px;         /* ignoré */','}'],'Résultat : l’ordre du HTML, top est ignoré','static',A1);
+PD('relative','position: relative','relative : décalé par rapport à sa propre position d’origine.',[['Place gardée','l’espace d’origine reste réservé'],['Décalage','top / left poussent l’élément'],['Rôle clé','repère pour les enfants absolute']],['.boite {','  position: relative;','  top: 20px;','  left: 40px;','}'],'Pointillés : position d’origine (toujours réservée)','relative',A1);
+PD('absolute','position: absolute','absolute : sort du flux, placé par rapport à l’ancêtre positionné le plus proche.',[['Hors flux','les autres éléments l’ignorent'],['Repère','parent non static, sinon la page'],['Habitude','parent en position: relative']],['.parent { position: relative; }','.enfant {','  position: absolute;','  top: 10px;','  right: 10px;','}'],'L’enfant est calé dans le coin du parent','absolute',A1);
+add({id:'badge',p:1,t:'relative + absolute : le badge',tg:'PARTIE 1 · POSITIONNEMENT',w:A1,h:()=>'<div class="cols"><div>'+lead('Exemple concret inspiré des boutiques en ligne')+code(['<div class="carte">','  <span class="badge">Nouveau</span>','  <h3>Casque audio</h3>','</div>'],'HTML')+code(['.carte { position: relative; }','.badge {','  position: absolute;','  top: -10px;','  right: 12px;','  background: orange;','  padding: 4px 10px;','}'])+'</div><div><div class="bgc"><em>Nouveau</em><b>Casque audio</b></div>'+cap('carte = relative · badge = absolute')+note('Le badge déborde de la carte sans pousser le contenu.')+'</div></div>'});
+PD('fixed','position: fixed','fixed : positionné par rapport à la fenêtre (viewport), il ne défile pas.',[['Toujours visible','même quand on fait défiler'],['Hors flux','prévoir un padding-top sur le body'],['Usages','navbar, retour en haut, chat']],['.navbar {','  position: fixed;','  top: 0;','  left: 0;','  width: 100%;','}','body { padding-top: 64px; }'],'La barre reste en haut pendant le défilement','fixed',A2);
+PD('sticky','position: sticky','sticky : normal au départ, puis collé quand le seuil est atteint.',[['Seuil obligatoire','top, bottom, left ou right'],['Limité au parent','repart avec lui en bas'],['Usages','sommaire, en-tête de tableau']],['.sommaire {','  position: sticky;','  top: 20px;','}'],'Fais défiler le cadre : seuil top: 20px','sticky',A2);
+add({id:'off',p:1,t:'top, right, bottom, left, z-index',tg:'PARTIE 1 · POSITIONNEMENT',w:A2,h:()=>table([['position','Les décalages sont mesurés depuis…'],['static','ignorés (aucun effet)'],['relative','sa position d’origine'],['absolute','l’ancêtre positionné le plus proche'],['fixed','la fenêtre du navigateur'],['sticky','le seuil de collage (dans le parent)']])+code(['.fenetre-modale {','  position: fixed;','  z-index: 100;  /* au-dessus du reste */','}'])+cap('z-index : ordre de superposition (éléments positionnés). Valeurs : px, %, em, auto')});
+add({id:'float',p:1,t:'float et clear',tg:'PARTIE 1 · POSITIONNEMENT',w:A2,h:()=>det('float : fait flotter un élément à gauche ou à droite : le texte l’entoure.',[['Valeurs','left, right, none'],['Effet de bord','le parent « oublie » sa hauteur'],['Solution','clear: both ou display: flow-root']],['.photo {','  float: left;','  width: 120px;','  margin-right: 16px;','}','.suite { clear: both; }'],'Pour une mise en page moderne : Flexbox',1),i:m=>{const v=m.querySelector('#viz');v.innerHTML='<div class="chips"></div><div class="fl"><div class="ph" id="ph">photo</div>Le float fait flotter un élément : le texte vient l’entourer, comme une photo dans un article de presse. Longtemps utilisé pour toute la mise en page, il sert aujourd’hui surtout à l’habillage du texte.</div>';seg(v.firstChild,['left','right','none'],'left',x=>v.querySelector('#ph').style.float=x);v.querySelector('#ph').style.float='left'}});
+add({id:'cmp',p:1,t:'Comparaison des positionnements',tg:'PARTIE 1 · POSITIONNEMENT',w:A2,h:()=>table([['Type','Dans le flux ?','Repère','Défilement','Usage typique'],['static','Oui','Aucun (top… ignorés)','Normal','Par défaut'],['relative','Oui, place gardée','Sa place d’origine','Normal','Décaler un peu ; parent'],['absolute','Non','Parent positionné','Avec son parent','Badge, infobulle, menu'],['fixed','Non','La fenêtre','Ne défile pas','Navbar, chat'],['sticky','Oui, puis collé','Parent + seuil','Défile puis se fige','Sommaire, en-tête'],['float','Partiellement','Bord du conteneur','Normal','Image dans un texte']])+cap('Hors flux = absolute et fixed : le contenu voisin les ignore.')});
+add({id:'labp',p:1,t:'Laboratoire : position',tg:'PARTIE 1 · POSITIONNEMENT',w:A2,h:()=>'<div id="viz"></div>',i:m=>posDemo(m.querySelector('#viz'),'relative',true)});
+add({id:'ex',p:1,t:'Exemples inspirés de vrais sites',tg:'PARTIE 1 · POSITIONNEMENT',w:A2,h:()=>cards([['Barre de navigation toujours visible','Inspiré de : sites de vidéos, réseaux sociaux','position: fixed'],['Badge du panier (le petit chiffre)','Inspiré de : boutiques en ligne','relative + absolute'],['Sommaire qui suit la lecture','Inspiré de : encyclopédies, documentations','position: sticky'],['Photo entourée de texte','Inspiré de : articles de presse, blogs','float: left']])});
+const FT='PARTIE 2 · FLEXBOX';
+add({id:'flex',p:2,t:'Introduction à Flexbox',tg:FT,w:A3,h:()=>lead('Avant : float, inline-block, astuces (marges calculées, hauteurs inégales). Avec Flexbox : display: flex (alignés, espaces réguliers, une seule règle).')+cards([['Une dimension','On organise une ligne ou une colonne à la fois.','1D'],['Alignement simple','Centrer, espacer et répartir en une ligne de CSS.','↔'],['Adaptatif','Les éléments grandissent, rétrécissent ou passent à la ligne.','⇆']])});
+add({id:'cont',p:2,t:'Flex container et flex items',tg:FT,w:A3,h:()=>det('Flex container : le parent qui reçoit display: flex.',[['Flex items','ses enfants directs (pas les petits-enfants)'],['inline-flex','le conteneur lui-même reste en ligne']],['.container {','  display: flex;','}'],'')+code(['<div class="container">','  <div>1</div> <div>2</div> <div>3</div>','</div>'],'HTML')});
+add({id:'axes',p:2,t:'Main axis et cross axis',tg:FT,w:A3,h:()=>cards([['row (défaut)','main = horizontal → · cross = vertical ↓'],['column','main = vertical ↓ · cross = horizontal →'],['justify-content','agit sur le main axis (axe principal)'],['align-items','agit sur le cross axis (axe transversal)']],{num:1})});
+add({id:'dir',p:2,t:'flex-direction',tg:FT,w:A3,h:()=>cards([['row','axe principal →',0,mini('flex-direction:row')],['row-reverse','axe principal ←',0,mini('flex-direction:row-reverse')],['column','axe principal ↓',0,mini('flex-direction:column;height:110px')],['column-reverse','axe principal ↑',0,mini('flex-direction:column-reverse;height:110px')]])});
+const jv=['flex-start','center','flex-end','space-between','space-around','space-evenly'];
+add({id:'jus',p:2,t:'justify-content',tg:FT,w:A3,h:()=>cards(jv.map(v=>[v,'',0,mini('justify-content:'+v)]))+code(['.container {','  display: flex;','  justify-content: space-between;','}'])+note('Astuce : space-between pour une barre de navigation (logo à gauche, liens à droite). around ≠ evenly : avec around, les bords valent la moitié de l’espace intérieur.')});
+const av=['stretch','flex-start','center','flex-end'];
+add({id:'ali',p:2,t:'align-items',tg:FT,w:A3,h:()=>cards(av.map(v=>[v+(v==='stretch'?' (défaut)':''),'',0,mini('align-items:'+v)]))+code(['.container {','  display: flex;','  align-items: center;','}'])+note('Centrage parfait : justify-content: center + align-items: center. baseline : aligne les lignes de base du texte.')});
+add({id:'wrap',p:2,t:'flex-wrap et align-content',tg:FT,w:A3,h:()=>cards([['nowrap (défaut)','Tous les éléments restent sur une ligne, quitte à être écrasés.'],['wrap','Les éléments passent à la ligne quand il n’y a plus de place.'],['align-content','Répartit les lignes dans le conteneur (start, center, space-between…).']])+code(['.container {','  display: flex;','  flex-wrap: wrap;','  align-content: center;','}'])+note('Piège : align-content ne fait rien s’il n’y a qu’une ligne. Il faut flex-wrap: wrap et plusieurs lignes.')});
+add({id:'gap',p:2,t:'gap et order',tg:FT,w:A4,h:()=>'<div class="cols"><div class="card"><b>gap</b><p>Espace entre les éléments (pas sur les bords).</p>'+mini('gap:20px')+code(['.container {','  display: flex;','  gap: 20px;  /* row-gap + column-gap */','}'])+'</div><div class="card"><b>order</b><p>Ordre d’affichage (0 par défaut), du plus petit au plus grand.</p>'+mini('')+cap('HTML : 1 · 2 · 3 — avec order: -1 sur le 3 :')+'<div class="mini"><i style="height:34px;background:var(--grn)"></i><i style="height:22px;background:var(--blue)"></i><i style="height:46px;background:var(--org)"></i></div>'+code(['.item3 {','  order: -1;  /* passe en premier */','}'])+'</div></div>'});
+add({id:'grow',p:2,t:'flex-grow, flex-shrink, flex-basis',tg:FT,w:A4,h:()=>cards([['flex-basis','Taille de départ de l’élément. Défaut : auto.','flex-basis: 200px'],['flex-grow','Part de l’espace libre reçue. Défaut : 0.','flex-grow: 1'],['flex-shrink','Capacité à rétrécir si la place manque. Défaut : 1.','flex-shrink: 0']])+'<div class="card" style="margin-top:12px"><b>Essaie : l’espace libre est partagé</b><div id="viz"></div></div>',i:m=>growDemo(m.querySelector('#viz'))});
+add({id:'self',p:2,t:'align-self et le raccourci flex',tg:FT,w:A4,h:()=>'<div class="cols"><div>'+table([['Raccourci','Équivaut à','Usage'],['flex: 1','1 1 0%','Partager l’espace'],['flex: auto','1 1 auto','Selon le contenu'],['flex: none','0 0 auto','Taille figée'],['flex: 0 0 200px','0 0 200px','Colonne fixe'],['flex: 1 1 220px','1 1 220px','Cartes adaptatives']])+'</div><div>'+code(['.item2 { align-self: flex-end; }','.item3 { align-self: center; }'])+note('align-self s’écrit sur l’élément et l’emporte sur align-items du conteneur.')+'</div></div>'});
+const FL=(id,t,prop,opts,notes,mode)=>add({id,p:2,t,tg:FT,w:A4,h:()=>'<div id="viz"></div>',i:m=>flexLab(m.querySelector('#viz'),prop,opts,notes,mode)});
+FL('labd','Laboratoire : flex-direction','flex-direction',['row','row-reverse','column','column-reverse'],['row (défaut) : axe principal horizontal, de gauche à droite.','row-reverse : axe principal inversé ←. L’ordre visuel change, pas celui du HTML.','column : axe principal vertical, de haut en bas.','column-reverse : axe principal vertical inversé, de bas en haut.'],'d');
+FL('labj','Laboratoire : justify-content','justify-content',jv,['au début de l’axe principal.','au milieu de l’axe principal.','à la fin de l’axe principal.','premier et dernier collés aux bords, espaces égaux entre eux. Idéal pour une navbar.','espace autour de chaque élément, les bords valent la moitié des espaces intérieurs.','tous les espaces sont identiques, bords compris.'],'j');
+FL('laba','Laboratoire : align-items','align-items',av,['(défaut) les éléments s’étirent sur toute la hauteur.','alignés en haut du cross axis.','centrés verticalement. Avec justify-content: center : centrage parfait.','alignés en bas du cross axis.'],'a');
+add({id:'cmp2',p:3,t:'Positionnement ou Flexbox ?',tg:'PRATIQUE & SYNTHÈSE',w:A4,h:()=>cards([['Positionnement','Placer ou superposer UN élément','position · top · right · bottom · left · z-index · float · clear'],['Conteneur flex','Organiser le GROUPE (sur le parent)','display: flex · flex-direction · justify-content · align-items · flex-wrap · align-content · gap'],['Éléments flex','Régler UN enfant (sur l’enfant)','order · flex-grow · flex-shrink · flex-basis · flex · align-self']].map(c=>[c[0],c[1],0,'<p style="font:13px Courier New,monospace;color:var(--blue)">'+c[2]+'</p>']),{num:1})+note('Règle d’or : le positionnement place un élément ; Flexbox organise des éléments. On combine les deux.')});
+add({id:'site',p:3,t:'Exemple concret : navbar et cartes',tg:'PRATIQUE & SYNTHÈSE',w:A4,h:()=>'<div class="cols"><div>'+code(['.navbar {','  display: flex;','  justify-content: space-between;','  align-items: center;','}','.cards {','  display: flex;','  flex-wrap: wrap;','  gap: 20px;','}','.card { flex: 1 1 220px; }'])+'</div><div class="card"><div class="nv"><b>Logo</b><span><i>Accueil</i><i>Cours</i><i>Contact</i></span></div><div class="cds"><div>Carte 1</div><div>Carte 2</div><div>Carte 3</div></div>'+cap('space-between · wrap + gap. Même principe que les listes de produits ou d’articles.')+'</div></div>'});
+add({id:'prat',p:3,t:'Pratiquons : TP et quiz',tg:'PRATIQUE & SYNTHÈSE',w:A4,h:()=>cards([['TP avancé : interface DevHub','8 étapes progressives · Positionnement + Flexbox combinés · Énoncé, résultat attendu, correction séparée','À faire seuls d’abord'],['Quiz interactif sur Quizizz','20 questions à choix multiples · Types, propriétés, code, pièges · Réponse et explication pour chaque question','Par équipes ou individuel']])});
+add({id:'ret',p:3,t:'À retenir',tg:'PRATIQUE & SYNTHÈSE',w:A4,h:()=>lead('<b>Le positionnement place. Flexbox organise.</b>')+cards([['Positionnement','Placer ou superposer un élément : static, relative, absolute, fixed, sticky, float.'],['Flexbox','Organiser un groupe d’éléments : conteneur, axes, alignement, taille.'],['Ensemble','Un vrai site combine les deux : navbar fixed + display: flex.'],['Pratique','On progresse en codant : TP DevHub et inspecteur du navigateur (F12).']],{num:1})});
+add({id:'fin',k:'end'});
+
+/* ---- demos ---- */
+function seg(el,opts,val,cb){el.innerHTML='';opts.forEach(o=>{const b=document.createElement('button');b.className='chip'+(o===val?' on':'');b.textContent=o;b.onclick=()=>{[...el.children].forEach(c=>c.classList.remove('on'));b.classList.add('on');cb(o)};el.appendChild(b)})}
+function posDemo(r,type,chips){
+  const P={p:type,t:20,l:20,rel:true};
+  r.innerHTML=(chips?'<div class="chips"></div>':'')+'<div class="stage"><div class="scr"><div class="fill">contenu avant ↓ (fais défiler)</div><div class="par rel"><span>.parent</span><div class="sib">Frère 1</div><div class="bx">Élément</div><div class="sib">Frère 2</div></div><div class="fill">contenu après</div><div class="fill">contenu après</div></div></div><div class="lbl"></div><input type="range" min="0" max="120" value="20" class="t"><div class="lbl"></div><input type="range" min="0" max="200" value="20" class="l"><label style="font-size:14px;display:block;margin-top:6px"><input type="checkbox" checked> le .parent a position: relative</label><div class="note" style="color:var(--org)"></div><div class="code"><pre></pre></div>';
+  const bx=r.querySelector('.bx'),L=r.querySelectorAll('.lbl'),N={static:'static : top et left sont ignorés, l’élément suit le flux.',relative:'relative : décalé depuis sa place d’origine, qui reste réservée (Frère 2 ne bouge pas).',absolute:'',fixed:'fixed : repère = la fenêtre (ici le cadre). Fais défiler : il ne bouge pas.',sticky:'sticky : fais défiler le cadre, il se colle au seuil top, puis repart avec son parent.'};
+  function up(){bx.style.position=P.p;bx.style.top=P.t+'px';bx.style.left=P.l+'px';r.querySelector('.par').classList.toggle('rel',P.rel);L[0].textContent='top : '+P.t+'px';L[1].textContent='left : '+P.l+'px';
+    r.querySelector('.note').textContent=P.p==='absolute'?(P.rel?'absolute : sorti du flux, repère = le .parent (position: relative).':'absolute : parent non positionné, le repère remonte au cadre (la « page »).'):N[P.p];
+    let c='.element {\n  position: '+P.p+';\n  top: '+P.t+'px;'+(P.p==='sticky'?'':'\n  left: '+P.l+'px;')+(P.p==='static'?'  /* ignoré */':'')+'\n}';r.querySelector('pre').innerHTML=c.split('\n').map(hl).join('\n')}
+  if(chips)seg(r.querySelector('.chips'),['static','relative','absolute','fixed','sticky'],type,v=>{P.p=v;up()});
+  r.querySelector('.t').oninput=e=>{P.t=+e.target.value;up()};r.querySelector('.l').oninput=e=>{P.l=+e.target.value;up()};
+  r.querySelector('input[type=checkbox]').onchange=e=>{P.rel=e.target.checked;up()};up();
+}
+function flexLab(r,prop,opts,notes,mode){
+  r.innerHTML='<div class="lbl">'+prop+'</div><div class="chips"></div><div class="fx"></div><div class="code"><pre></pre></div><div class="note"></div>';
+  const f=r.querySelector('.fx'),H=[44,84,64];
+  for(let i=0;i<3;i++){const d=document.createElement('div');d.className='it';d.textContent=i+1;d.style.minHeight=(mode==='d'?50:H[i])+'px';if(mode==='j'||mode==='d')d.style.minHeight='50px';f.appendChild(d)}
+  if(mode==='d')f.style.alignItems='flex-start';if(mode==='j'){f.style.alignItems='center'}
+  f.style.gap=mode==='j'?'0':'10px';
+  function set(o){const k=opts.indexOf(o);f.style[prop.replace(/-(\w)/g,(_,c)=>c.toUpperCase())]=o;
+    if(mode==='a')[...f.children].forEach((d,i)=>d.style.height=o==='stretch'?'auto':H[i]+'px');
+    r.querySelector('pre').innerHTML=['.container {','  display: flex;','  '+prop+': '+o+';','}'].map(hl).join('\n');
+    r.querySelector('.note').textContent=(mode==='j'?o+' : ':'')+notes[k]}
+  seg(r.querySelector('.chips'),opts,opts[0],set);set(opts[0]);
+}
+function growDemo(r){
+  const G=[1,2,1];r.innerHTML='<div class="fx" style="height:90px;gap:8px;padding:8px"></div><div class="grid"></div><div class="code"><pre></pre></div>';
+  const f=r.querySelector('.fx');
+  function up(){f.innerHTML=G.map(g=>'<div class="it" style="flex:'+g+' 1 50px;font-size:14px">grow '+g+'</div>').join('');r.querySelector('pre').innerHTML=G.map((g,i)=>'.item'+(i+1)+' { flex-grow: '+g+'; }').join('\n')}
+  r.querySelector('.grid').innerHTML=G.map((g,i)=>'<div><div class="lbl">élément '+(i+1)+'</div><input type="range" min="0" max="4" value="'+g+'" data-i="'+i+'"></div>').join('');
+  r.querySelectorAll('input').forEach(x=>x.oninput=e=>{G[+e.target.dataset.i]=+e.target.value;up()});up();
+}
+
+/* ---- deck ---- */
+let cur=0;
+function show(i,nh){
+  cur=Math.max(0,Math.min(S.length-1,i));const s=S[cur],m=$('#m');
+  document.body.classList.toggle('dk',!!s.k);
+  document.documentElement.style.setProperty('--pc',s.p===2?'#F97316':s.p===3?'#16A34A':'#2563EB');
+  if(s.k==='title')m.innerHTML='<div class="s"><span class="tag" style="background:#F97316">DEV102 · SUJET C.3</span><h1 class="big">Manipuler le positionnement</h1><h2 style="color:#7FB0FF;margin:0">CSS · Positionnement &amp; Flexbox</h2><p style="color:#C9D3E6">Module DEV102 – CSS · 1ère année Informatique Appliquée</p><div class="ppl"><div>PARTIE 1 · POSITIONNEMENT<br><br>Abdellah Akil<br>Lahmourat Azelarab</div><div class="o">PARTIE 2 · FLEXBOX<br><br>Hiba Jaouhari<br>Malak Jebni</div></div><p style="color:#C9D3E6">Flèches du clavier ou boutons pour naviguer · démos interactives dans les diapos.</p></div>';
+  else if(s.k==='end')m.innerHTML='<div class="s"><h1 class="big">Merci pour votre attention</h1><h2 style="color:#7FB0FF">Des questions ?</h2><p style="color:#C9D3E6">Pour aller plus loin : MDN Web Docs (CSS) · Flexbox Froggy</p><div class="ppl"><div>'+A1+'</div><div>'+A2+'</div><div class="o">'+A3+'</div><div class="o">'+A4+'</div></div></div>';
+  else{$('#ttl').textContent=s.t;$('#tag').textContent=s.tg;m.innerHTML='<div class="s">'+s.h()+'</div>';s.i&&s.i(m)}
+  m.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(S.findIndex(x=>x.id===b.dataset.go)));
+  $('#num').textContent=cur+1;$('#who').textContent=s.k?'DEV102 – CSS · C.3 Manipuler le positionnement':s.w+' · '+(cur+1)+' / '+S.length;
+  $('#prev').disabled=cur===0;$('#next').disabled=cur===S.length-1;m.scrollTop=0;
+  if(!nh){try{history.replaceState(null,'','#s'+(cur+1))}catch(e){}}
+}
+$('#prev').onclick=()=>show(cur-1);$('#next').onclick=()=>show(cur+1);$('#plan').onclick=()=>show(1);
+addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1)});
+function fh(){const m=/^#s(\d+)$/.exec(location.hash);show(m?+m[1]-1:0,true)}
+addEventListener('hashchange',fh);fh();
+</script>
+</body>
+</html>
